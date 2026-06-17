@@ -49,7 +49,7 @@
   }
   </script>
 
-  <!-- Resolve asset paths for GitHub Pages (root + SPA routes via 404.html) -->
+  <!-- Resolve asset paths for GitHub Pages (root + project subfolder) -->
   <script>
     (function () {
       var path = location.pathname;
@@ -58,12 +58,15 @@
 
       var base = './';
       if (location.protocol !== 'file:') {
-        var routes = ['/about', '/privacy', '/terms', '/tools/text-compare'];
-        for (var i = 0; i < routes.length; i++) {
-          var idx = path.indexOf(routes[i]);
+        var spaRoutes = ['/about', '/privacy', '/terms', '/tools/text-compare'];
+        for (var i = 0; i < spaRoutes.length; i++) {
+          var idx = path.indexOf(spaRoutes[i]);
           if (idx >= 0) { base = idx > 0 ? path.slice(0, idx) + '/' : '/'; break; }
         }
-        if (base === './') base = '/';
+        if (base === './') {
+          var segments = path.split('/').filter(Boolean);
+          base = segments.length > 0 ? '/' + segments[0] + '/' : '/';
+        }
       }
 
       var el = document.createElement('base');
@@ -386,7 +389,7 @@
         </ul>
 
         <h2>Security</h2>
-        <p>All processing happens locally in your browser using vanilla JavaScript. Your text never leaves your device. There are no API calls, no cookies, and no third-party scripts beyond the Inter font from Google Fonts.</p>
+        <p>All text comparison happens locally in your browser using vanilla JavaScript. Your text never leaves your device. Google Analytics is used for anonymous site usage statistics only — it does not receive your compared text.</p>
 
         <h2>FAQ</h2>
         <dl class="faq-list">

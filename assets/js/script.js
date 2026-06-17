@@ -857,6 +857,21 @@ const Router = {
 
   legacyHomePath: 'tools/text-compare',
 
+  basePath() {
+    if (this.isFileProtocol()) return '';
+    const baseEl = document.querySelector('base');
+    if (!baseEl) return '';
+    try {
+      let pathname = new URL(baseEl.href, window.location.origin).pathname;
+      if (pathname.length > 1 && pathname.endsWith('/')) {
+        pathname = pathname.slice(0, -1);
+      }
+      return pathname === '/' ? '' : pathname;
+    } catch {
+      return '';
+    }
+  },
+
   isFileProtocol() {
     return window.location.protocol === 'file:';
   },
@@ -874,16 +889,22 @@ const Router = {
       return file === 'index.html' || file === '';
     }
     const path = this.normalizePath(pathname);
-    return path === '' || path === '/' ||
-      path.endsWith(`/${this.legacyHomePath}`) ||
-      path.includes(`/${this.legacyHomePath}/`);
+    if (path.endsWith(`/${this.legacyHomePath}`) || path.includes(`/${this.legacyHomePath}/`)) {
+      return true;
+    }
+    const prefix = this.basePath();
+    if (prefix) return path === prefix;
+    return path === '' || path === '/';
   },
 
   linkHref(pageId) {
     if (this.isFileProtocol()) {
       return 'index.html';
     }
-    return this.routes[pageId] || this.routes.home;
+    const route = this.routes[pageId] || this.routes.home;
+    const prefix = this.basePath();
+    if (route === '/') return `${prefix}/`;
+    return `${prefix}${route}`;
   },
 
   resolveFileUrl(relativePath) {

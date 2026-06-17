@@ -49,7 +49,7 @@
   }
   </script>
 
-  <!-- Resolve asset paths for GitHub Pages (root + SPA routes via 404.html) -->
+  <!-- Resolve asset paths for GitHub Pages (root + project subfolder) -->
   <script>
     (function () {
       var path = location.pathname;
@@ -58,12 +58,15 @@
 
       var base = './';
       if (location.protocol !== 'file:') {
-        var routes = ['/about', '/privacy', '/terms', '/tools/text-compare'];
-        for (var i = 0; i < routes.length; i++) {
-          var idx = path.indexOf(routes[i]);
+        var spaRoutes = ['/about', '/privacy', '/terms', '/tools/text-compare'];
+        for (var i = 0; i < spaRoutes.length; i++) {
+          var idx = path.indexOf(spaRoutes[i]);
           if (idx >= 0) { base = idx > 0 ? path.slice(0, idx) + '/' : '/'; break; }
         }
-        if (base === './') base = '/';
+        if (base === './') {
+          var segments = path.split('/').filter(Boolean);
+          base = segments.length > 0 ? '/' + segments[0] + '/' : '/';
+        }
       }
 
       var el = document.createElement('base');

@@ -2,14 +2,14 @@
   "name": "CompareText",
   "short_name": "CompareText",
   "description": "Compare text instantly — line, word, and character diff in your browser.",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#f8fafc",
   "theme_color": "#2563eb",
   "icons": [
     {
-      "src": "/assets/icons/favicon.svg",
+      "src": "assets/icons/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
