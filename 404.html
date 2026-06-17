@@ -49,39 +49,52 @@
   }
   </script>
 
-  <!-- Resolve asset paths for GitHub Pages (root + project subfolder) -->
+  <!-- Resolve asset paths for GitHub Pages project sites (/Text-Compare/) -->
   <script>
     (function () {
       var path = location.pathname;
       if (path.endsWith('/index.html')) path = path.slice(0, -'/index.html'.length) || '/';
       if (path.length > 1 && path.endsWith('/')) path = path.slice(0, -1);
 
-      var base = './';
-      if (location.protocol !== 'file:') {
+      var basePath = '';
+      if (location.protocol === 'file:') {
+        window.__APP_BASE__ = '';
+      } else {
         var spaRoutes = ['/about', '/privacy', '/terms', '/tools/text-compare'];
         for (var i = 0; i < spaRoutes.length; i++) {
           var idx = path.indexOf(spaRoutes[i]);
-          if (idx >= 0) { base = idx > 0 ? path.slice(0, idx) + '/' : '/'; break; }
+          if (idx >= 0) { basePath = idx > 0 ? path.slice(0, idx) : ''; break; }
         }
-        if (base === './') {
+        if (basePath === '') {
           var segments = path.split('/').filter(Boolean);
-          base = segments.length > 0 ? '/' + segments[0] + '/' : '/';
+          if (segments.length > 0) basePath = '/' + segments[0];
         }
+        window.__APP_BASE__ = basePath;
       }
 
-      var el = document.createElement('base');
-      el.href = base;
-      document.head.appendChild(el);
+      function assetUrl(relative) {
+        if (location.protocol === 'file:') return relative;
+        return (basePath || '') + '/' + relative.replace(/^\//, '');
+      }
+
+      function addLink(rel, href, type) {
+        var link = document.createElement('link');
+        link.rel = rel;
+        link.href = assetUrl(href);
+        if (type) link.type = type;
+        document.head.appendChild(link);
+      }
+
+      addLink('manifest', 'manifest.json');
+      addLink('icon', 'assets/icons/favicon.svg', 'image/svg+xml');
+      addLink('apple-touch-icon', 'assets/icons/favicon.svg');
+      addLink('stylesheet', 'assets/css/style.css');
     })();
   </script>
 
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="assets/icons/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -490,6 +503,15 @@
 
   <!-- Toast notification -->
   <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
-  <script src="assets/js/script.js" defer></script>
+  <script>
+    (function () {
+      var s = document.createElement('script');
+      s.src = location.protocol === 'file:'
+        ? 'assets/js/script.js'
+        : (window.__APP_BASE__ || '') + '/assets/js/script.js';
+      s.defer = true;
+      document.body.appendChild(s);
+    })();
+  </script>
 </body>
 </html>

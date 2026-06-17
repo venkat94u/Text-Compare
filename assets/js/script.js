@@ -859,17 +859,7 @@ const Router = {
 
   basePath() {
     if (this.isFileProtocol()) return '';
-    const baseEl = document.querySelector('base');
-    if (!baseEl) return '';
-    try {
-      let pathname = new URL(baseEl.href, window.location.origin).pathname;
-      if (pathname.length > 1 && pathname.endsWith('/')) {
-        pathname = pathname.slice(0, -1);
-      }
-      return pathname === '/' ? '' : pathname;
-    } catch {
-      return '';
-    }
+    return window.__APP_BASE__ || '';
   },
 
   isFileProtocol() {
