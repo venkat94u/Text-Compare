@@ -825,60 +825,65 @@ function showToast(message, type = 'info') {
   }, 3000);
 }
 
+const GA_MEASUREMENT_ID = 'G-F5N67VEYFH';
+
+const Analytics = {
+  trackPageView() {
+    if (Router.isFileProtocol() || typeof gtag !== 'function') return;
+    gtag('config', GA_MEASUREMENT_ID, {
+      page_path: window.location.pathname + window.location.search,
+      page_location: window.location.href,
+    });
+  },
+};
+
 /* ==========================================================================
-   Router — path-based URLs (/tools/text-compare, /about, …)
+   Router — path-based URLs (/ , /about, …)
    ========================================================================== */
 
 const Router = {
   routes: {
-    home: '/tools/text-compare',
+    home: '/',
     about: '/about',
     privacy: '/privacy',
     terms: '/terms',
   },
 
-  filePaths: {
-    home: 'tools/text-compare/index.html',
-    about: 'about/index.html',
-    privacy: 'privacy/index.html',
-    terms: 'terms/index.html',
-  },
-
   pathKeys: {
-    home: 'tools/text-compare',
     about: 'about',
     privacy: 'privacy',
     terms: 'terms',
   },
 
+  legacyHomePath: 'tools/text-compare',
+
   isFileProtocol() {
     return window.location.protocol === 'file:';
   },
 
-  linkHref(pageId) {
-    if (this.isFileProtocol()) {
-      return this.fileLinkHref(pageId);
-    }
-    return this.routes[pageId] || this.routes.home;
+  normalizePath(pathname) {
+    let path = pathname;
+    if (path.endsWith('/index.html')) path = path.slice(0, -'/index.html'.length) || '/';
+    if (path.length > 1 && path.endsWith('/')) path = path.slice(0, -1);
+    return path;
   },
 
-  fileLinkHref(pageId) {
-    const pathname = window.location.pathname;
-    const target = this.filePaths[pageId] || this.filePaths.home;
-
-    if (pathname.includes('/tools/text-compare/')) {
-      if (pageId === 'home') return './index.html';
-      return `../../${target}`;
+  isHomePath(pathname = window.location.pathname) {
+    if (this.isFileProtocol()) {
+      const file = pathname.split('/').pop() || '';
+      return file === 'index.html' || file === '';
     }
+    const path = this.normalizePath(pathname);
+    return path === '' || path === '/' ||
+      path.endsWith(`/${this.legacyHomePath}`) ||
+      path.includes(`/${this.legacyHomePath}/`);
+  },
 
-    if (/\/(about|privacy|terms)\//.test(pathname)) {
-      if (pageId === 'home') return '../tools/text-compare/index.html';
-      const seg = this.pathKeys[pageId];
-      if (pathname.includes(`/${seg}/`)) return './index.html';
-      return `../${target}`;
+  linkHref(pageId) {
+    if (this.isFileProtocol()) {
+      return 'index.html';
     }
-
-    return target;
+    return this.routes[pageId] || this.routes.home;
   },
 
   resolveFileUrl(relativePath) {
@@ -886,33 +891,25 @@ const Router = {
   },
 
   isOnPage(pageId, pathname = window.location.pathname) {
+    if (pageId === 'home') return this.isHomePath(pathname);
     const key = this.pathKeys[pageId];
     return pathname.includes(`/${key}/`) || pathname.endsWith(`/${key}`);
   },
 
-  isInRouteFolder(pathname = window.location.pathname) {
-    return Object.values(this.pathKeys).some(key =>
-      pathname.includes(`/${key}/`) || pathname.endsWith(`/${key}`)
-    );
-  },
-
   pageFromPath(pathname = window.location.pathname) {
-    let path = pathname;
-    if (path.endsWith('/index.html')) path = path.slice(0, -'/index.html'.length) || '/';
-    if (path.length > 1 && path.endsWith('/')) path = path.slice(0, -1);
+    if (this.isHomePath(pathname)) return 'home';
 
+    const path = this.normalizePath(pathname);
     for (const [pageId, key] of Object.entries(this.pathKeys)) {
       if (path.endsWith(`/${key}`) || path.includes(`/${key}/`)) {
         return pageId;
       }
     }
 
-    if (path.endsWith('/index.html') && !this.isInRouteFolder(path)) return null;
-    if (path === '/' || path === '') return null;
-    return 'home';
+    return null;
   },
 
-  navigate(pageId, replace = false) {
+  navigate(pageId, replace = false, track = true) {
     const url = this.linkHref(pageId);
 
     if (this.isFileProtocol()) {
@@ -928,6 +925,8 @@ const Router = {
     } else {
       history.pushState({ pageId }, '', url);
     }
+
+    if (track) Analytics.trackPageView();
   },
 
   initLinks() {
@@ -940,16 +939,26 @@ const Router = {
     const pageId = this.pageFromPath();
 
     if (pageId === null) {
+      if (!this.isFileProtocol()) {
+        this.navigate('home', true, false);
+        Analytics.trackPageView();
+      }
+      return 'home';
+    }
+
+    if (pageId === 'home' && /\/tools\/text-compare/.test(window.location.pathname)) {
       if (this.isFileProtocol()) {
-        location.replace(this.resolveFileUrl(this.fileLinkHref('home')));
+        location.replace(this.resolveFileUrl('index.html'));
         return 'home';
       }
-      this.navigate('home', true);
+      this.navigate('home', true, false);
+      Analytics.trackPageView();
       return 'home';
     }
 
     if (!this.isFileProtocol()) {
       history.replaceState({ pageId }, '', this.linkHref(pageId));
+      Analytics.trackPageView();
     }
 
     return pageId;
@@ -1471,12 +1480,10 @@ const App = {
     };
 
     const navigateTo = pageId => {
-      if (Router.isFileProtocol()) {
-        Router.navigate(pageId);
-        return;
-      }
       showPage(pageId);
-      Router.navigate(pageId);
+      if (!Router.isFileProtocol()) {
+        Router.navigate(pageId);
+      }
     };
 
     document.addEventListener('click', e => {

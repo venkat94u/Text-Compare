@@ -5,16 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F5N67VEYFH"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-F5N67VEYFH');
+  </script>
+
   <title>CompareText — Compare Text Instantly | Line, Word &amp; Character Diff</title>
-  <meta name="description" content="CompareText is a free, privacy-first text comparison tool. Compare two texts line by line, word by word, and character by character. No login, no tracking — everything runs locally in your browser.">
+  <meta name="description" content="CompareText is a free, privacy-first text comparison tool. Compare two texts line by line, word by word, and character by character. No login — your text stays in your browser.">
   <meta name="keywords" content="text compare, diff checker, text diff, line compare, word compare, character compare, online diff tool">
   <meta name="author" content="CompareText">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://comparetext.app/tools/text-compare">
+  <link rel="canonical" href="https://comparetext.app/">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://comparetext.app/tools/text-compare">
+  <meta property="og:url" content="https://comparetext.app/">
   <meta property="og:title" content="CompareText — Compare Text Instantly">
   <meta property="og:description" content="Professional text comparison tool. Compare line by line, word by word, and character by character. 100% local — no data leaves your browser.">
   <meta property="og:site_name" content="CompareText">
@@ -31,7 +40,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "CompareText",
-    "url": "https://comparetext.app/tools/text-compare",
+    "url": "https://comparetext.app/",
     "description": "Professional text comparison tool for line, word, and character diff. Runs entirely in the browser.",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "Any",
@@ -40,7 +49,7 @@
   }
   </script>
 
-  <!-- Resolve asset paths from tools/text-compare/, about/, privacy/, terms/ -->
+  <!-- Resolve asset paths for GitHub Pages (root + SPA routes via 404.html) -->
   <script>
     (function () {
       var path = location.pathname;
@@ -48,14 +57,8 @@
       if (path.length > 1 && path.endsWith('/')) path = path.slice(0, -1);
 
       var base = './';
-      if (location.protocol === 'file:') {
-        if (path.indexOf('/tools/text-compare') !== -1 || path.endsWith('/tools/text-compare')) {
-          base = '../../';
-        } else if (/\/(about|privacy|terms)(\/|$)/.test(path)) {
-          base = '../';
-        }
-      } else {
-        var routes = ['/tools/text-compare', '/about', '/privacy', '/terms'];
+      if (location.protocol !== 'file:') {
+        var routes = ['/about', '/privacy', '/terms', '/tools/text-compare'];
         for (var i = 0; i < routes.length; i++) {
           var idx = path.indexOf(routes[i]);
           if (idx >= 0) { base = idx > 0 ? path.slice(0, idx) + '/' : '/'; break; }
@@ -83,7 +86,7 @@
   <!-- Header -->
   <header class="site-header" role="banner">
     <div class="header-inner">
-      <a href="/tools/text-compare" class="logo" data-page="home" aria-label="CompareText home">
+      <a href="/" class="logo" data-page="home" aria-label="CompareText home">
         <svg class="logo-icon" width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
           <rect x="2" y="4" width="10" height="20" rx="2" stroke="currentColor" stroke-width="2"/>
           <rect x="16" y="4" width="10" height="20" rx="2" stroke="currentColor" stroke-width="2"/>
@@ -96,7 +99,7 @@
 
       <nav class="main-nav" role="navigation" aria-label="Main navigation">
         <ul class="nav-list">
-          <li><a href="/tools/text-compare" class="nav-link active" data-page="home">Compare</a></li>
+          <li><a href="/" class="nav-link active" data-page="home">Compare</a></li>
           <li><a href="/about" class="nav-link" data-page="about">About</a></li>
           <li><a href="/privacy" class="nav-link" data-page="privacy">Privacy</a></li>
         </ul>
@@ -118,7 +121,7 @@
 
     <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation" hidden>
       <ul class="mobile-nav-list">
-        <li><a href="/tools/text-compare" class="nav-link active" data-page="home">Compare</a></li>
+        <li><a href="/" class="nav-link active" data-page="home">Compare</a></li>
         <li><a href="/about" class="nav-link" data-page="about">About</a></li>
         <li><a href="/privacy" class="nav-link" data-page="privacy">Privacy</a></li>
       </ul>
@@ -366,7 +369,7 @@
     <section id="about" class="page" aria-labelledby="about-heading" hidden>
       <div class="content-page">
         <h1 id="about-heading">About CompareText</h1>
-        <p class="lead">CompareText is a professional, privacy-first text comparison tool that runs entirely in your browser. No servers, no accounts, no tracking.</p>
+        <p class="lead">CompareText is a professional, privacy-first text comparison tool that runs entirely in your browser. No servers, no accounts — your text never leaves your device.</p>
 
         <h2>Features</h2>
         <ul class="feature-list">
@@ -418,14 +421,18 @@
         <h1 id="privacy-heading">Privacy Policy</h1>
         <p class="lead">Your privacy is not a feature — it's the foundation of CompareText.</p>
 
-        <h2>No Cookies</h2>
-        <p>CompareText does not use cookies of any kind. We do not set, read, or rely on cookies for functionality or analytics.</p>
+        <h2>Cookies</h2>
+        <p>CompareText does not use cookies for functionality. Google Analytics may set cookies to measure anonymous site usage. You can opt out via your browser settings or Google's opt-out tools.</p>
+
+        <h2>Analytics</h2>
+        <p>CompareText uses Google Analytics to collect anonymous usage statistics such as page views, general traffic patterns, and how visitors navigate the site. This helps us understand usage and improve the tool.</p>
+        <p>Your compared text is never sent to Google or any server — all diff processing stays in your browser. See <a href="https://policies.google.com/privacy" rel="noopener noreferrer">Google's Privacy Policy</a> for how Google handles analytics data.</p>
+
+        <h2>Other Third-Party Services</h2>
+        <p>CompareText also loads the Inter font from Google Fonts. No advertising trackers or fingerprinting code are used.</p>
 
         <h2>No Login</h2>
         <p>There is no user account system. You never need to sign up, log in, or provide any personal information to use CompareText.</p>
-
-        <h2>No Tracking</h2>
-        <p>CompareText does not include analytics scripts, advertising trackers, fingerprinting code, or any third-party tracking services. The only external resource loaded is the Inter font from Google Fonts.</p>
 
         <h2>Everything Runs Locally</h2>
         <p>All text comparison, diff computation, file reading, and export operations happen entirely within your browser. No text, files, or comparison results are ever transmitted to any server.</p>

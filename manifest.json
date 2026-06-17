@@ -2,7 +2,7 @@
   "name": "CompareText",
   "short_name": "CompareText",
   "description": "Compare text instantly — line, word, and character diff in your browser.",
-  "start_url": "/tools/text-compare/",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#f8fafc",

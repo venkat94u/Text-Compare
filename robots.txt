@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://comparetext.app/sitemap.xml
+Sitemap: https://venkat94u.github.io/Text-Compare/sitemap.xml

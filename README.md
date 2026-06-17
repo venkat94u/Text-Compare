@@ -6,12 +6,13 @@ A free, privacy-first text comparison tool that runs entirely in your browser.
 
 ```
 comparetext/
-├── index.html              Landing page
+├── index.html              Compare tool (default page)
+├── 404.html                GitHub Pages SPA fallback (same app shell)
 ├── about/                  About page (SPA route)
 ├── privacy/                Privacy page (SPA route)
 ├── terms/                  Terms page (SPA route)
 ├── tools/
-│   └── text-compare/       Main compare tool
+│   └── text-compare/       Redirects to /
 ├── assets/
 │   ├── css/                Stylesheets
 │   ├── js/                 JavaScript
@@ -25,13 +26,12 @@ comparetext/
 
 ## Routes
 
-| Page    | Path                    |
-|---------|-------------------------|
-| Home    | `/`                     |
-| Compare | `/tools/text-compare/`  |
-| About   | `/about/`               |
-| Privacy | `/privacy/`             |
-| Terms   | `/terms/`               |
+| Page    | Path        |
+|---------|-------------|
+| Compare | `/`         |
+| About   | `/about/`   |
+| Privacy | `/privacy/` |
+| Terms   | `/terms/`   |
 
 ## Local development
 
@@ -42,10 +42,7 @@ cd comparetext
 python3 -m http.server 8080
 ```
 
-Then open:
-
-- Landing: http://localhost:8080/
-- Tool: http://localhost:8080/tools/text-compare/
+Then open http://localhost:8080/ — the compare tool loads directly.
 
 ## Features
 
