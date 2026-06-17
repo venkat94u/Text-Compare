@@ -1658,6 +1658,12 @@ const App = {
    Bootstrap
    ========================================================================== */
 
-document.addEventListener('DOMContentLoaded', () => {
+function bootApp() {
   App.init();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootApp);
+} else {
+  bootApp();
+}

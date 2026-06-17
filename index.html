@@ -89,6 +89,11 @@
       addLink('icon', 'assets/icons/favicon.svg', 'image/svg+xml');
       addLink('apple-touch-icon', 'assets/icons/favicon.svg');
       addLink('stylesheet', 'assets/css/style.css');
+
+      var script = document.createElement('script');
+      script.src = assetUrl('assets/js/script.js');
+      script.defer = true;
+      document.head.appendChild(script);
     })();
   </script>
 
@@ -503,15 +508,5 @@
 
   <!-- Toast notification -->
   <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
-  <script>
-    (function () {
-      var s = document.createElement('script');
-      s.src = location.protocol === 'file:'
-        ? 'assets/js/script.js'
-        : (window.__APP_BASE__ || '') + '/assets/js/script.js';
-      s.defer = true;
-      document.body.appendChild(s);
-    })();
-  </script>
 </body>
 </html>
