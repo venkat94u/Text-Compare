@@ -8,11 +8,7 @@ A free, privacy-first text comparison tool that runs entirely in your browser.
 comparetext/
 ├── index.html              Compare tool (default page)
 ├── 404.html                GitHub Pages SPA fallback (same app shell)
-├── about/                  About page (SPA route)
-├── privacy/                Privacy page (SPA route)
-├── terms/                  Terms page (SPA route)
-├── tools/
-│   └── text-compare/       Redirects to /
+├── .nojekyll               Disable Jekyll on GitHub Pages
 ├── assets/
 │   ├── css/                Stylesheets
 │   ├── js/                 JavaScript
@@ -20,18 +16,19 @@ comparetext/
 │   └── images/             Image assets
 ├── robots.txt
 ├── manifest.json
-├── sitemap.xml
-└── 404.html
+└── sitemap.xml
 ```
+
+SPA routes (`/about`, `/privacy`, `/terms`) are handled client-side via `404.html` on GitHub Pages — do not add physical folders for those paths.
 
 ## Routes
 
-| Page    | Path        |
-|---------|-------------|
-| Compare | `/`         |
-| About   | `/about/`   |
-| Privacy | `/privacy/` |
-| Terms   | `/terms/`   |
+| Page    | Path (on GitHub Pages)              |
+|---------|-------------------------------------|
+| Compare | `/Text-Compare/`                    |
+| About   | `/Text-Compare/about/`              |
+| Privacy | `/Text-Compare/privacy/`            |
+| Terms   | `/Text-Compare/terms/`              |
 
 ## Local development
 
